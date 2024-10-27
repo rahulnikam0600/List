@@ -29,9 +29,9 @@ public class HomeController {
 	@GetMapping("/")
 	public String getProduct(Model m) {
 		List<Product> products = productService.getAllProduct();
-		System.out.println("getProducts");
+		//System.out.println("getProducts");
 		m.addAttribute("products",products);
-		System.out.println(products);
+		//System.out.println(products);
 		return "index";
 	}
 	
@@ -40,22 +40,7 @@ public class HomeController {
 		@PostMapping("/addproduct")
 		public String addProduct(@ModelAttribute Product product,
 				HttpSession session) throws IOException {
-			System.out.println("addProducts");
-						
-			boolean existProduct = productService.existProduct(product.getName());
-			
-			if(existProduct) {
-				session.setAttribute("errorMsg","Already exist's");
-			}
-			else {
-				Product addProduct = productService.saveProduct(product);
-				System.out.println("addProduct : "+product);
-				if(ObjectUtils.isEmpty(addProduct))
-					session.setAttribute("errorMsg", "Not saved! Internal Server Error");
-				else 								
-					session.setAttribute("successMsg", "Saved sucessfully!");
-			}
-
+			Product addProduct = productService.saveProduct(product);
 			return "redirect:";
 		}
 
@@ -64,16 +49,7 @@ public class HomeController {
 		@PostMapping("/checkproduct/{id}")
 		public String checkProduct(@PathVariable int id, @RequestParam(required = false, defaultValue = "false") Boolean status,
 				HttpSession session) throws IOException {
-
-			Boolean updated = productService.updateProduct(id,status);
-			
-			if(updated) {
-				session.setAttribute("successMsg","Product Updated Successfully");
-			}else {
-				session.setAttribute("errorMsg","Something Wrong on Server");
-			}
-
-			
+			productService.updateProduct(id,status);			
 			return "redirect:/";
 		}
 
@@ -83,14 +59,7 @@ public class HomeController {
 	public String deleteProduct(@PathVariable int id,
 			HttpSession session) {
 		
-		Boolean deleteProduct = productService.deleteProduct(id);
-		
-		if(deleteProduct) {
-			session.setAttribute("successMsg","Product Deleted Successfully");
-		}else {
-			session.setAttribute("errorMsg","Something Wrong on Server");
-		}
-		
+		productService.deleteProduct(id);
 		return "redirect:/";
 		
 	}

@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+.card-sh{
+	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
+}
+.cat-div{
+	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.completed {
+	text-decoration: line-through;
+	color: #888;
+}
+.task-actions {
+	display: flex;
+	gap: 10px;
+}
+.large-checkbox {
+    transform: scale(2); /* Adjust scale factor to change size */
+    -webkit-transform: scale(2); /* For Safari */
+    margin: 10px; /* Optional: adjust space around the checkbox */
+}
+.large-text {
+    font-size: 24px; /* or try 1.5em, 150%, or 1.5rem */
+}
