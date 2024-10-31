@@ -9,7 +9,7 @@ import com.nikam.listapp.model.Product;
 @Service
 public interface ProductService {
 
-	public Product saveProduct(Product product);
+	public Boolean saveProduct(Product product);
 	
 	public List<Product> getAllProduct();
 	
@@ -17,5 +17,7 @@ public interface ProductService {
 
 	public Boolean deleteProduct(int id);
 
-	public Boolean updateProduct(int id, Boolean status);
+	public Boolean updateProductStatus(int id, Boolean status);
+
+	public void updateSortingLogic(String string);
 }

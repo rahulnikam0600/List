@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import com.nikam.listapp.model.Product;
+import com.nikam.listapp.model.SortingOption;
 import com.nikam.listapp.repository.ProductRepo;
 import com.nikam.listapp.service.ProductService;
 
@@ -18,11 +19,21 @@ public class ProductServiceImpl implements ProductService{
 	@Autowired
 	private ProductRepo productRepo;
 	
+	@Autowired
+	private SortingOption sortingOption;
+	
 	@Override
-	public Product saveProduct(Product product) {
-
-		return productRepo.save(product);
+	public Boolean saveProduct(Product product) {
 		
+		Product oldProduct = productRepo.findByName(product.getName());
+		
+		if(!ObjectUtils.isEmpty(oldProduct)) {
+			updateProductStatus(oldProduct.getId(), false);
+		}
+		else {
+			productRepo.save(product);
+		}		
+		return true;
 	}
 
 	@Override
@@ -36,15 +47,18 @@ public class ProductServiceImpl implements ProductService{
 		for(Product product: products) {
 			if(!product.isStatus()) {
 				updatedProducts1.add(product);
-			}
-		}
-		Collections.sort(updatedProducts1, (p1,p2) -> p1.getName().compareTo(p2.getName()));
-		for(Product product: products) {
-			if(product.isStatus()) {
+			}else {
 				updatedProducts2.add(product);
 			}
 		}
-		Collections.sort(updatedProducts2, (p1,p2) -> p1.getName().compareTo(p2.getName()));
+
+		if(sortingOption.getName().equals("AZ")) {
+			Collections.sort(updatedProducts1, (p1,p2) -> p1.getName().compareTo(p2.getName()));
+			Collections.sort(updatedProducts2, (p1,p2) -> p1.getName().compareTo(p2.getName()));
+		} else if(sortingOption.getName().equals("ZA")) {
+			Collections.sort(updatedProducts1, (p1,p2) -> p2.getName().compareTo(p1.getName()));
+			Collections.sort(updatedProducts2, (p1,p2) -> p2.getName().compareTo(p1.getName()));
+		}
 		
 		updatedProducts1.addAll(updatedProducts2);
 		
@@ -73,7 +87,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public Boolean updateProduct(int id ,Boolean status) {
+	public Boolean updateProductStatus(int id ,Boolean status) {
 
 		Product product = productRepo.findById(id).orElse(null);
 		
@@ -84,6 +98,13 @@ public class ProductServiceImpl implements ProductService{
 		}
 		
 		return false;
+	}
+
+	@Override
+	public void updateSortingLogic(String string) {
+		
+		sortingOption.setName(string);
+		
 	}
 
 }

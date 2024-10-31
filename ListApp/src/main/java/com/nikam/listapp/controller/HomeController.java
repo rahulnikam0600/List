@@ -40,16 +40,16 @@ public class HomeController {
 		@PostMapping("/addproduct")
 		public String addProduct(@ModelAttribute Product product,
 				HttpSession session) throws IOException {
-			Product addProduct = productService.saveProduct(product);
+			productService.saveProduct(product);
 			return "redirect:";
 		}
 
 //-------------------------------------------------------------------------------------------------------------------------------------
 		
 		@PostMapping("/checkproduct/{id}")
-		public String checkProduct(@PathVariable int id, @RequestParam(required = false, defaultValue = "false") Boolean status,
+		public String checkProductStatus(@PathVariable int id, @RequestParam(required = false, defaultValue = "false") Boolean status,
 				HttpSession session) throws IOException {
-			productService.updateProduct(id,status);			
+			productService.updateProductStatus(id,status);			
 			return "redirect:/";
 		}
 
@@ -64,5 +64,34 @@ public class HomeController {
 		
 	}
 
+	
 //-------------------------------------------------------------------------------------------------------------------------------------
+	
+			@GetMapping("/sortbyaz")
+			public String sortByAZ() {
+				productService.updateSortingLogic("AZ");		
+				return "redirect:/";
+			}
+
+//-------------------------------------------------------------------------------------------------------------------------------------
+
+			@GetMapping("/sortbyza")
+			public String sortByZA() {
+				productService.updateSortingLogic("ZA");		
+				return "redirect:/";
+			}
+
+//-------------------------------------------------------------------------------------------------------------------------------------
+
+			
+			@GetMapping("/sortbytime")
+			public String sortByTime() {
+				productService.updateSortingLogic("AZ");		
+				return "redirect:/";
+			}
+
+//-------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 }
